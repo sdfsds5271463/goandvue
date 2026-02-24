@@ -15,7 +15,7 @@ import HelloWorld from './components/HelloWorld.vue';
     //const response = await fetch("http://localhost:8080/api/hello");
     const response = await fetch("/api/hello");
     const data = await response.text();
-    console.log(data);
+    console.log(data); //test
   },
 })
 export default class App extends Vue {}
