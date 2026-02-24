@@ -15,7 +15,7 @@ func main() {
   // API
   http.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-    fmt.Fprintln(w, "Hello from Go API2")
+    fmt.Fprintln(w, "Hello from Go API3")
   })
 
   // 靜態檔
