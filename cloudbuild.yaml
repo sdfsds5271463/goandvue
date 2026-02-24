@@ -1,0 +1,32 @@
+steps:
+  # 1️⃣ Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
+      - '.'
+
+  # 2️⃣ Push image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
+
+  # 3️⃣ Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'my-service'
+      - '--image'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
+      - '--region'
+      - 'asia-east1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
