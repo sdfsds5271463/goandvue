@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: go-vue-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: go-vue
   ports:
