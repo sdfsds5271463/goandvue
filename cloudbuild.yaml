@@ -1,5 +1,5 @@
 steps:
-  # 1️⃣ Build image
+  # 1️⃣ Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -13,18 +13,20 @@ steps:
       - 'push'
       - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
 
-  # 3️⃣ Connect to GKE
+  # 3️⃣ Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
+    entrypoint: gcloud
     args:
-      - '-c'
-      - |
-        gcloud container clusters get-credentials go-vue-cluster \
-          --zone asia-east1-b \
-          --project $PROJECT_ID
-
-        kubectl set image deployment/go-vue-app \
-          go-vue-container=asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA
+      - 'run'
+      - 'deploy'
+      - 'my-service'
+      - '--image'
+      - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
+      - '--region'
+      - 'asia-east1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
 
 images:
   - 'asia-east1-docker.pkg.dev/$PROJECT_ID/my-repo/go-vue-app:$COMMIT_SHA'
